@@ -1,0 +1,35 @@
+#version: '3.8' # Or a newer version if available
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: postgres
+    #restart: unless-stopped
+    environment:
+      POSTGRES_DB: book_social_network
+      POSTGRES_USER: username
+      POSTGRES_PASSWORD: password
+      PGDATA: /var/lib/postgresql/data
+    volumes:
+      - postgres:/data/postgres
+    ports:
+      - 5432:5432
+    networks:
+      - spring-demo
+
+  mail-dev:
+    container_name: mail-dev
+    image: maildev/maildev
+    ports:
+      - "1080:1080"
+      - "1025:1025"
+    networks:
+      - spring-demo
+
+networks:
+  spring-demo:
+    driver: bridge
+
+volumes:
+  postgres:
+    driver: local
